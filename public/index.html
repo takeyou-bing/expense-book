@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>가계부</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <!-- 로그인 화면 -->
+  <section id="login-view" class="login" hidden>
+    <form id="login-form" class="card login-card">
+      <h1>가계부</h1>
+      <p class="muted">비밀번호를 입력해 주세요.</p>
+      <input id="login-password" type="password" autocomplete="current-password" placeholder="비밀번호" required autofocus>
+      <button type="submit" class="btn primary">로그인</button>
+      <p id="login-error" class="error" role="alert"></p>
+    </form>
+  </section>
+
+  <!-- 메인 화면 -->
+  <div id="app-view" hidden>
+    <header class="topbar">
+      <h1>가계부</h1>
+      <button id="logout-btn" class="btn ghost">로그아웃</button>
+    </header>
+
+    <main class="layout">
+      <!-- 입력 / 수정 폼 -->
+      <section class="card">
+        <h2 id="form-title">지출 추가</h2>
+        <form id="expense-form" class="expense-form">
+          <input type="hidden" id="expense-id">
+          <label>날짜<input type="date" id="f-date" required></label>
+          <label>항목<input type="text" id="f-item" maxlength="100" placeholder="예: 점심 식사" required></label>
+          <label>카테고리<select id="f-category" required></select></label>
+          <label>금액(원)<input type="number" id="f-amount" min="0" step="1" inputmode="numeric" placeholder="0" required></label>
+          <div class="form-actions">
+            <button type="submit" class="btn primary" id="submit-btn">추가</button>
+            <button type="button" class="btn ghost" id="cancel-edit" hidden>취소</button>
+          </div>
+        </form>
+        <p id="form-error" class="error" role="alert"></p>
+      </section>
+
+      <!-- 지출 내역 -->
+      <section class="card wide">
+        <div class="section-head">
+          <h2>지출 내역</h2>
+          <form id="search-form" class="search">
+            <label>시작<input type="date" id="s-from"></label>
+            <label>종료<input type="date" id="s-to"></label>
+            <button type="submit" class="btn">검색</button>
+            <button type="button" class="btn ghost" id="s-today">오늘</button>
+            <button type="button" class="btn ghost" id="s-reset">전체</button>
+          </form>
+        </div>
+        <p class="muted" id="list-summary"></p>
+        <div class="table-wrap">
+          <table class="list">
+            <thead>
+              <tr><th>날짜</th><th>항목</th><th>카테고리</th><th class="num">금액</th><th></th></tr>
+            </thead>
+            <tbody id="expense-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 월별 합계 -->
+      <section class="card">
+        <div class="section-head">
+          <h2>월별 지출 합계</h2>
+          <select id="m-year" aria-label="연도"></select>
+        </div>
+        <table class="list">
+          <thead><tr><th>월</th><th class="num">건수</th><th class="num">합계</th></tr></thead>
+          <tbody id="monthly-rows"></tbody>
+          <tfoot><tr><th>합계</th><th class="num" id="monthly-count"></th><th class="num" id="monthly-total"></th></tr></tfoot>
+        </table>
+      </section>
+
+      <!-- 카테고리별 합계 -->
+      <section class="card">
+        <div class="section-head">
+          <h2>카테고리별 지출</h2>
+          <input type="month" id="c-month" aria-label="월">
+        </div>
+        <p class="muted" id="cat-total"></p>
+        <div id="cat-chart" class="bar-chart" role="img" aria-label="카테고리별 지출 막대그래프"></div>
+        <details class="table-toggle">
+          <summary>표로 보기</summary>
+          <table class="list">
+            <thead><tr><th>카테고리</th><th class="num">건수</th><th class="num">합계</th><th class="num">비율</th></tr></thead>
+            <tbody id="cat-rows"></tbody>
+          </table>
+        </details>
+      </section>
+    </main>
+  </div>
+
+  <div id="tooltip" class="tooltip" hidden></div>
+  <script src="/app.js"></script>
+</body>
+</html>
